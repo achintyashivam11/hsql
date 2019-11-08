@@ -57,12 +57,12 @@ ply
 
 <h2>The Directory Organization</h2>
 
-DATABASE_ROOT/
-    database_name.schema (there can be many schema files)
-    dblist.db (only one file which contains the list of all the databases)
-    database_name/ (there is one directory for each database)
-        table_name/
-            column_name (there can be column files)
+DATABASE_ROOT/<br/>
+    database_name.schema (there can be many schema files)<br/>
+    dblist.db (only one file which contains the list of all the databases)<br/>
+    database_name/ (there is one directory for each database)<br/>
+        table_name/<br/>
+            column_name (there can be column files)<br/>
     
 
 **Have commented as many important lines as possible. If you have any doubts, call me.**
