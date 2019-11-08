@@ -58,11 +58,18 @@ ply
 <h2>The Directory Organization</h2>
 
 DATABASE_ROOT/<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;database_name.schema &nbsp;&nbsp;&nbsp;&nbsp; (there can be many schema files (unique))<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;dblist.db &nbsp;&nbsp;&nbsp;&nbsp; (only one file which contains the list of all the databases)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;database_name/ &nbsp;&nbsp;&nbsp;&nbsp; (there is one directory for each database)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table_name/ &nbsp;&nbsp;&nbsp;&nbsp; (there is one directory for a table in a database)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column_name &nbsp;&nbsp;&nbsp;&nbsp; (there can be many column files (unique))<br/>
-    
+&nbsp;&nbsp;&nbsp;&nbsp;database_name.schema <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;dblist.db <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;database_name/<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table_name/ &nbsp;&nbsp;&nbsp;&nbsp; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column_name<br/>
+
+**Note**
+
+
+1. dblist.db is file which contains the list of all the databases (only 1)
+2. There is one schema file per database
+3. There is one directory for each database 
+4. column files contain the data in a column (same column cannot repeat in the table can be found in other table in same db)
 
 **Have commented as many important lines as possible. If you have any doubts, call me.**
