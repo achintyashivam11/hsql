@@ -58,11 +58,11 @@ ply
 <h2>The Directory Organization</h2>
 
 DATABASE_ROOT/<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;database_name.schema (there can be many schema files)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;database_name.schema (there can be many schema files (unique))<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;dblist.db (only one file which contains the list of all the databases)<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;database_name/ (there is one directory for each database)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table_name/<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column_name (there can be column files)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table_name/ (there is one directory for a table in a database)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column_name (there can be many column files (unique))<br/>
     
 
 **Have commented as many important lines as possible. If you have any doubts, call me.**
