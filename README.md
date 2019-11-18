@@ -18,7 +18,7 @@
 6. schema (not there in standard SQL. Added to view schema of databases and tables)
 7. current database (again not there in standard SQL. Added to know the currently selected database)
 8. exit() or quit() (to quit the interpreter)
-9. added list database as well to list all available databases
+9. list database (to list all available databases)
 
 <h2>What are requirements ?</h2>
 
