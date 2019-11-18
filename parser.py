@@ -13,11 +13,13 @@ def p_all(p):
            | select
            | cdb
            | schema
+           | dblist
            | exit"""
 
 def p_create(p): 
     '''create : CREATE DATABASE ID SEMI'''
     global current_db
+    global hdfs_path
     fd=open(hdfs_path+"/"+"dblist.db",'a')
     fd.write(p[3]+"\n")
     fd.close()
@@ -26,6 +28,16 @@ def p_create(p):
     f=open(hdfs_path+"/"+p[3]+".schema","w")  # Schema must be stored in HDFS in a separate folder. This folder will contain all the csv files, schema of databases, tables,logs,etc
     f.close()
     print("CREATED DATABASE",p[3],"!")
+
+def p_dblist(p):
+    """dblist : LIST DATABASE SEMI"""
+    global hdfs_path
+    fd=open(hdfs_path+"/"+"dblist.db")
+    for i in fd.readlines():
+        t=i.strip()
+        if t!='':
+            print(i)
+
 
 def p_cdb(p):
     """cdb : CURRENT DATABASE SEMI"""
@@ -39,21 +51,25 @@ def p_schema(p):
     """schema : SCHEMA DATABASE ID SEMI
               | SCHEMA CURRENT DATABASE SEMI
               | SCHEMA TABLE ID SEMI"""
+    global hdfs_path
     if p[2]=='database':
-        f=open(hdfs_path+"/"+p[3]+".schema")
-        flag=0
-        for i in f.readlines():
-            flag=1
-            temp=i.strip().split(":")
-            if temp[0]=='table':
-                print(temp[0],temp[1],":")
-            elif len(temp)==1:
-                continue
-            else:
-                print("\t",temp[0].split("/")[-1],":",temp[1])
-        if flag==0:
-            print("NO TABLE IN DATABASE !")
-        f.close()
+        try:
+            f=open(hdfs_path+"/"+p[3]+".schema")
+            flag=0
+            for i in f.readlines():
+                flag=1
+                temp=i.strip().split(":")
+                if temp[0]=='table':
+                    print(temp[0],temp[1],":")
+                elif len(temp)==1:
+                    continue
+                else:
+                    print("\t",temp[0].split("/")[-1],":",temp[1])
+            if flag==0:
+                print("NO TABLE IN DATABASE !")
+            f.close()
+        except:
+            print("NO DATABASE NAMED",p[3])
     elif p[2]=='current':
         if current_db==None:
             print("NO DATABASE SELECTED !")
@@ -83,31 +99,33 @@ def p_schema(p):
             pos=-1
             l=len(lines)
             for i in range(l):
-                temp=lines[i].strip().split()
+                temp=lines[i].strip().split(":")
                 if temp[0]=='table' and temp[1]==p[3]:
                     pos=i
+                    break
             if pos==-1:
                 print("NO TABLE NAMED",p[3],"FOUND !")
             else:
                 pos1=l
                 for i in range(pos+1,l):
-                    temp=lines[i].strip().split()
+                    temp=lines[i].strip().split(":")
                     if temp[0]=='table':
                         pos1=i
                         break
                 for i in range(pos,pos1):
-                    temp=i.strip().split(":")
+                    temp=lines[i].strip().split(":")
                     if temp[0]=='table':
-                        print(temp[0],temp[1],":")
+                        print(temp[0],":",temp[1],"\n")
                     elif len(temp)==1:
                         continue
                     else:
-                        print("\t",temp[0].split("/")[-1],":",temp[1])
+                        print("\t",temp[0],":",temp[1])
                   
 
 def p_use(p):
     '''use : USE ID SEMI'''
     global current_db
+    global hdfs_path
     fd=open(hdfs_path+"/"+"dblist.db")
     flag=0
     dblist=fd.readlines()
@@ -128,6 +146,7 @@ def p_use(p):
 def p_load(p):
     '''load : LOAD ID AS ID LPAREN column_dtypes RPAREN SEMI'''
     global current_db
+    global hdfs_path
     try:
         if current_db==None:
             print("NO DATABASE SELECTED !")
@@ -141,15 +160,16 @@ def p_load(p):
             f.close()
             f=open(hdfs_path+"/"+current_db+".schema","a")
             f.write("table:"+p[4]+"\n")
+            f.write(hdfs_path+"/"+current_db+"/"+p[4]+"/"+p[2])
             f.write("column:dtype"+"\n")
-            paths=[]
-            mkdir(hdfs_path+"/"+current_db+"/"+p[4])
+            columns=[]
+            #mkdir(hdfs_path+"/"+current_db+"/"+p[4])
             for i in p[6]:
-                f.write(hdfs_path+"/"+current_db+"/"+p[4]+"/"+i[0]+":"+i[1]+"\n")
-                paths.append(hdfs_path+"/"+current_db+"/"+p[4]+"/"+i[0])
+                f.write(i[0]+":"+i[1]+"\n")
+                columns.append((i[0],i[1]))
             f.write("\n")
             f.close()
-            load(p[2],paths)
+            load(p[2],hdfs_path+"/"+current_db+"/"+p[4])
             print("LOADED TABLE",p[4],"INTO DATABASE ",current_db)
     except:
         print("NO FILE NAMED ",p[2],"FOUND !")
@@ -183,6 +203,7 @@ def p_drop(p):
     '''drop : DROP DATABASE ID SEMI
             | DROP TABLE ID SEMI'''
     global current_db
+    global hdfs_path
     if p[2]=='database':
         fd=open(hdfs_path+"/"+"dblist.db")
         dblist=fd.readlines()
@@ -197,7 +218,7 @@ def p_drop(p):
                 fd.write(i+"\n")
             fd.close()
             # delete schema and db folder
-            remove(hdfs_path+"/"+p[3])
+            drop("database",hdfs_path+"/"+current_db+"/"+p[3])
             remove(hdfs_path+"/"+p[3]+".schema") 
             print("REMOVED DATABASE ",p[3],"!") 
         else:
@@ -226,13 +247,13 @@ def p_drop(p):
                     if temp[0]=='table':
                         pos1=i
                         break
-                    remove(temp[0])
                 for i in range(pos,pos1):
                     lines.pop(pos)
                 fd=open(hdfs_path+"/"+current_db+".schema","w")
                 for i in lines:
                     fd.write(i+"\n")
                 fd.close()
+                drop("table",hdfs_path+"/"+current_db+"/"+p[3])
                 print("DROPPED TABLE",p[3],"FROM DATABASE",current_db,"!")
     else:
         print("COULD NOT DROP DATABASE !")
@@ -240,6 +261,7 @@ def p_drop(p):
 def p_select(p):
     """select : SELECT columns FROM ID WHERE logical_not_expression SEMI"""
     global current_db
+    global hdfs_path
     if current_db==None:
             print("NO DATABASE SELECTED !")
     else:

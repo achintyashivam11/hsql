@@ -1,7 +1,7 @@
 import ply.lex as lex
 # Reserved words
 reserved = (
-    'SELECT','LOAD','MAX','COUNT','SUM','USE','DATABASE','AS','INT','FLOAT','STR','FROM','WHERE','EXIT','CREATE','DROP','QUIT','TABLE','CURRENT','SCHEMA'
+    'SELECT','LOAD','MAX','COUNT','SUM','USE','DATABASE','AS','INT','FLOAT','STR','FROM','WHERE','EXIT','CREATE','DROP','QUIT','TABLE','CURRENT','SCHEMA',"LIST"
 )
 
 tokens = reserved + (
