@@ -48,7 +48,7 @@ ply
 <h2>What's must be done ?</h2>
 
 1. Make it work on hadoop (create and delete files/folders in hadoop. currently made to work on file system and not hadoop. May have to change remove() in implementation.py. can do in end I guess)
-2. Implement load completely (currently only writing meta data (schema info) into database_name.schema. Must split the csv file into columns and store each column as separate file. All addresses are passed into load function. Must compelete it )
+2. Implement load completely
 3. Implement select
 4. Implement aggregate functions MAX, COUNT, SUM
 
@@ -62,7 +62,7 @@ DATABASE_ROOT/<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;dblist.db <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;database_name/<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table_name/ &nbsp;&nbsp;&nbsp;&nbsp; <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column_name<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;csv_file<br/>
 
 **Note**
 
@@ -70,6 +70,4 @@ DATABASE_ROOT/<br/>
 1. dblist.db is file which contains the list of all the databases (only 1)
 2. There is one schema file per database
 3. There is one directory for each database 
-4. column files contain the data in a column (same column cannot repeat in the table can be found in other table in same db)
-
 **Have commented as many important lines as possible. If you have any doubts, call me.**
