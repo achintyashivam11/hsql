@@ -83,14 +83,14 @@ def drop(what,path):
     # what : "table" or "database"
     # path : path to table or database
     os.system('hadoop fs -rm -r -skipTrash /path/what')
-    pass
+    return
 
 def select(columns,db,table,expression):
     #columns : list of objects of type column (defined above)
     #db : name of database 
     #table : name of table 
     #expression: where expression for filtering (it is a string)
-    pass
+    return
 
 def MAX():
     # max aggregation. called by select. calling parameters have to be decided
