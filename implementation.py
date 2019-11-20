@@ -76,10 +76,13 @@ def db_info(db):
 def load(original_file_path,hdfs_file_path):
     # original_file_path : path (including name) for the loaded csv file
     # hdfs_file_path : hdfs path to store the csv file
-    pass
+    os.system('hdfs dfs -put original_file_path hdfs_file_path')
+    return 
+
 def drop(what,path):
     # what : "table" or "database"
     # path : path to table or database
+    os.system('hadoop fs -rm -r -skipTrash /path/what')
     pass
 
 def select(columns,db,table,expression):
